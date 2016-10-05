@@ -65,6 +65,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   # The path to the sqlite database file.
   # we dont need path to db
   # config :path, :validate => :string, :required => true
+  default :codec, "plain"
 
   # Any tables to exclude by name.
   # By default all tables are followed.
@@ -79,8 +80,6 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   config :onec_server_reg_path, :validate => :string, :required => true
 
   SINCE_TABLE = :path_since
-
-  @path =  File.join(:onec_server_reg_path, :onec_base_guid, "1Cv8Log", "1Cv8.lgd")
 
   public
   def init_placeholder_table(db)
@@ -191,6 +190,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
     require "sequel"
     require "jdbc/sqlite3" 
     @host = Socket.gethostname
+    @path =  File.join(@onec_server_reg_path, @onec_base_guid, "1Cv8Log", "1Cv8.lgd")
     @logger.info("Registering sqliteonec input", :database => @path)    
 	  @sinceDb = Sequel.connect("jdbc:sqlite:#{@path_since}")
   	@db = Sequel.connect("jdbc:sqlite:#{@path}") 
@@ -233,7 +233,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
             #@logger.info("magic people - woodoo people ", :e1 => event, :e2 => eventPayLoad)
             event.append(eventPayLoad)
 
-            event["timestamp"] = event["curetimestamp"]
+            #event["timestamp"] = event["curetimestamp"]
 
             queue << event
             @table_data[k][:place] = row[:rowID]
