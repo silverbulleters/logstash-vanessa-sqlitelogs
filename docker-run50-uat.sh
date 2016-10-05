@@ -1,3 +1,5 @@
+gem build logstash-input-sqliteonec.gemspec
+
 docker stop es-logs
 docker rm es-logs
 

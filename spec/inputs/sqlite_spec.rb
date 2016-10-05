@@ -10,7 +10,7 @@ describe LogStash::Inputs::SqliteOnec do
         "path_since" => "TimeStamperDB",
         "onec_base_name" => "My Super 1C Base",
         "onec_base_guid" => "likeguid",
-        "onec_server_reg_path" => File.expand_path('../../../servinfo', __FILE__)
+        "onec_server_reg_path" => File.expand_path('../../../testdata/servinfo', __FILE__)
       } 
   }
 
