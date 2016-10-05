@@ -1,10 +1,10 @@
 ---
 sudo: false
 language: ruby
-cache: bundler
 rvm:
-vm:
-- jruby-1.7.25
+  - 2.2
+  - jruby
+  - rbx-2
 script:
 - bundle exec rspec spec
 jdk: oraclejdk8
