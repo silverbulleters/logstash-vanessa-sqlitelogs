@@ -24,9 +24,10 @@ input {
 
 * intall JDK
 * install jruby
-* write tests
+* write specs
 * read [this doc](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
-* pull-request you needs ;-)
+* use `docker-run50-uat.sh` for final checks
+* pull-request your needs ;-)
 
 ## Why in English and not in Russia
 
