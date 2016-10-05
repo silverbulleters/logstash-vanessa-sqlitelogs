@@ -5,60 +5,6 @@ require "socket"
 require "stud/interval"
 require "concurrent"
 
-
-# Read rows from an sqlite database.
-#
-# This is most useful in cases where you are logging directly to a table.
-# Any tables being watched must have an `id` column that is monotonically
-# increasing.
-#
-# All tables are read by default except:
-# 
-# * ones matching `sqlite_%` - these are internal/adminstrative tables for sqlite
-# * `since_table` - this is used by this plugin to track state.
-#
-# Example
-# [source,sql]
-#     % sqlite /tmp/example.db
-#     sqlite> CREATE TABLE weblogs (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         ip STRING,
-#         request STRING,
-#         response INTEGER);
-#     sqlite> INSERT INTO weblogs (ip, request, response) 
-#         VALUES ("1.2.3.4", "/index.html", 200);
-#
-# Then with this logstash config:
-# [source,ruby]
-#     input {
-#       sqlite {
-#         path => "/tmp/example.db"
-#         type => weblogs
-#       }
-#     }
-#     output {
-#       stdout {
-#         debug => true
-#       }
-#     }
-#
-# Sample output:
-# [source,ruby]
-#     {
-#       "@source"      => "sqlite://sadness/tmp/x.db",
-#       "@tags"        => [],
-#       "@fields"      => {
-#         "ip"       => "1.2.3.4",
-#         "request"  => "/index.html",
-#         "response" => 200
-#       },
-#       "@timestamp"   => "2013-05-29T06:16:30.850Z",
-#       "@source_host" => "sadness",
-#       "@source_path" => "/tmp/x.db",
-#       "@message"     => "",
-#       "@type"        => "foo"
-#     }
-#
 class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   config_name "sqliteonec"
 
@@ -198,7 +144,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
     @table_data = {}
     @tables.each do |table|
       init_placeholder_table(@sinceDb)
-      last_place = get_placeholder(@sinceDb, table)
+      last_place = get_placeholder(@sinceDb, @onec_base_name + table)
       @table_data[table] = { :name => table, :place => last_place }
     end
   end # def register
@@ -223,12 +169,19 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
           @logger.debug("current rows is #{count}")
 
           rows.each do |row| 
+
             event = LogStash::Event.new("host" => @host, "message" => @path, "onecbase" => @onec_base_name)
             decorate(event)
             # store each column as a field in the event.
             #@logger.info("current row", :currow => row)
 
-            eventPayLoad = LogStash::Event.new(row)
+            payload = Hash[
+              row.map { |k, v| 
+                  [k.to_s, decorate_value(v)] 
+              }
+            ]  
+
+            eventPayLoad = LogStash::Event.new(payload)
 
             #@logger.info("magic people - woodoo people ", :e1 => event, :e2 => eventPayLoad)
             event.append(eventPayLoad)
@@ -239,7 +192,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
             @table_data[k][:place] = row[:rowID]
           end
           # Store the last-seen row in the database
-          update_placeholder(@sinceDb, table_name, @table_data[k][:place])
+          update_placeholder(@sinceDb, @onec_base_name + table_name, @table_data[k][:place])
         end
 
         if count == 0
@@ -258,6 +211,20 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
       end # loop
     end # begin/rescue
   end #run
+
+  private
+  def decorate_value(value)
+    if value.is_a?(Time)
+      # transform it to LogStash::Timestamp as required by LS
+      LogStash::Timestamp.new(value)
+    elsif value.is_a?(DateTime)
+      # Manual timezone conversion detected.
+      # This is slower, so we put it in as a conditional case.
+      LogStash::Timestamp.new(Time.parse(value.to_s))
+    else
+      value
+    end
+  end
 
 end # class Logtstash::Inputs::EventLog
 

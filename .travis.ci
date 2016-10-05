@@ -1,0 +1,11 @@
+---
+sudo: false
+language: ruby
+cache: bundler
+rvm:
+vm:
+- jruby-1.7.25
+script:
+- bundle exec rspec spec
+jdk: oraclejdk8
+before_install: []

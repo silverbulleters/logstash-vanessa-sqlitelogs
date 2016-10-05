@@ -1,5 +1,7 @@
 # LogStash Input Plugin for 1C Application Logs
 
+[![Build Status](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs.svg?branch=master)](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs)
+
 * use the new sqlite format of Application Logs
 
 ## Standart Input
