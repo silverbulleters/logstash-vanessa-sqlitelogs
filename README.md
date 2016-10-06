@@ -34,6 +34,8 @@ input {
 
 * run `logstash -f your-config-file.conf` and go to the kibana dashboards - you will see your logs
 
+![simple logs](./docs/simple-discover.png)
+
 ## Contribute
 
 * intall JDK
@@ -53,3 +55,10 @@ input {
 ## Why in English and not in Russia
 
 * let it be 1C World !!!
+
+## Why Not Beats ?
+
+not now, but soon
+
+* there is empty repo with Elastic Beats for 1C - https://github.com/silverbulleters/vanessa-beats
+* and experimental concept - https://github.com/silverbulleters-research/sqliteOneCBeat
