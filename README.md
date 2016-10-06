@@ -47,6 +47,7 @@ input {
 * read [this doc](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
 * impove plugin with your code
 * run `bundle exec rspec spec`
+* run `bundle exec cucumber`
 * use `docker-run50-uat.sh` for final checks (or `docker-run50-uat.cmd` on Windows 10 with docker HyperV support)
   * if there is a error - run `docker-logstash-only` for debug and fix
 * try to see `http://localhost:5601` - you will see kibana with two demo 1C Application Journal
