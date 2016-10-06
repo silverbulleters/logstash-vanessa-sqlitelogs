@@ -57,6 +57,8 @@ input {
 
 * let it be 1C World !!!
 
+but there is a [simple Russian readme](./docs/README_RU.md) in `docs` dir
+
 ## Why Not Beats ?
 
 not now, but soon
