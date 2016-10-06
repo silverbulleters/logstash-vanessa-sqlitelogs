@@ -2,66 +2,66 @@
 
 [![Build Status](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs.svg?branch=master)](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs)
 
-* плагин для чтения с помощью LogStash журнала регистрации в формате sqlite для  [Платформы 1C:Предприятия](http://1c.ru) 
+* РїР»Р°РіРёРЅ РґР»СЏ С‡С‚РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ LogStash Р¶СѓСЂРЅР°Р»Р° СЂРµРіРёСЃС‚СЂР°С†РёРё РІ С„РѕСЂРјР°С‚Рµ sqlite РґР»СЏ  [РџР»Р°С‚С„РѕСЂРјС‹ 1C:РџСЂРµРґРїСЂРёСЏС‚РёСЏ](http://1c.ru) 
 
-## Инсталяция
+## РРЅСЃС‚Р°Р»СЏС†РёСЏ
 
-вам понадобится
+РІР°Рј РїРѕРЅР°РґРѕР±РёС‚СЃСЏ
 
-* исталировать logstash
-* скачать плагин со страницы релизов [текущий релиз 0.1.4](https://github.com/silverbulleters-research/logstash-vanessa-sqlitelogs/releases/download/0.1.4/logstash-input-sqliteonec-0.1.4.gem)
-* запустить команду в консоли `logstash-plugin install /srv/logstash-input-sqliteonec-0.1.4.gem`
+* РёСЃС‚Р°Р»РёСЂРѕРІР°С‚СЊ logstash
+* СЃРєР°С‡Р°С‚СЊ РїР»Р°РіРёРЅ СЃРѕ СЃС‚СЂР°РЅРёС†С‹ СЂРµР»РёР·РѕРІ [С‚РµРєСѓС‰РёР№ СЂРµР»РёР· 0.1.4](https://github.com/silverbulleters-research/logstash-vanessa-sqlitelogs/releases/download/0.1.4/logstash-input-sqliteonec-0.1.4.gem)
+* Р·Р°РїСѓСЃС‚РёС‚СЊ РєРѕРјР°РЅРґСѓ РІ РєРѕРЅСЃРѕР»Рё `logstash-plugin install /srv/logstash-input-sqliteonec-0.1.4.gem`
 
-## Настройка
+## РќР°СЃС‚СЂРѕР№РєР°
 
-* создайте ваш конфигурационный файл с секциями `input`, `filter` и `output`
+* СЃРѕР·РґР°Р№С‚Рµ РІР°С€ РєРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅС‹Р№ С„Р°Р№Р» СЃ СЃРµРєС†РёСЏРјРё `input`, `filter` Рё `output`
 
-примерная секция `input` выглядит так
+РїСЂРёРјРµСЂРЅР°СЏ СЃРµРєС†РёСЏ `input` РІС‹РіР»СЏРґРёС‚ С‚Р°Рє
 
 ```
 input {
 
     sqliteonec {
 		type => "1CLog"
-		path_since => "IncrementalInputTable" # где хранить время последней синхронизированной записи
-		onec_base_name => "MyVanessaERP" # человекочитаемое имя базы для отображения
-		onec_base_guid => "9c1205e0-595b-4edd-9f70-6dda09b6f888" # GUID базы (обычно берется из файла 1CV8Clst.lst)
-		onec_server_reg_path => "C:\srvinfo\reg_1541" # путь к каталогу хранения журналов на сервере
+		path_since => "IncrementalInputTable" # РіРґРµ С…СЂР°РЅРёС‚СЊ РІСЂРµРјСЏ РїРѕСЃР»РµРґРЅРµР№ СЃРёРЅС…СЂРѕРЅРёР·РёСЂРѕРІР°РЅРЅРѕР№ Р·Р°РїРёСЃРё
+		onec_base_name => "MyVanessaERP" # С‡РµР»РѕРІРµРєРѕС‡РёС‚Р°РµРјРѕРµ РёРјСЏ Р±Р°Р·С‹ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ
+		onec_base_guid => "9c1205e0-595b-4edd-9f70-6dda09b6f888" # GUID Р±Р°Р·С‹ (РѕР±С‹С‡РЅРѕ Р±РµСЂРµС‚СЃСЏ РёР· С„Р°Р№Р»Р° 1CV8Clst.lst)
+		onec_server_reg_path => "C:\srvinfo\reg_1541" # РїСѓС‚СЊ Рє РєР°С‚Р°Р»РѕРіСѓ С…СЂР°РЅРµРЅРёСЏ Р¶СѓСЂРЅР°Р»РѕРІ РЅР° СЃРµСЂРІРµСЂРµ
     }
 
 }
 ```
 
-* запустите `logstash -f your-config-file.conf` и если вы откроете рабочий стол kibana - вы увидет свои журналы регистрации
+* Р·Р°РїСѓСЃС‚РёС‚Рµ `logstash -f your-config-file.conf` Рё РµСЃР»Рё РІС‹ РѕС‚РєСЂРѕРµС‚Рµ СЂР°Р±РѕС‡РёР№ СЃС‚РѕР» kibana - РІС‹ СѓРІРёРґРµС‚ СЃРІРѕРё Р¶СѓСЂРЅР°Р»С‹ СЂРµРіРёСЃС‚СЂР°С†РёРё
 
-![simple logs](./docs/simple-discover.png)
+![simple logs](./simple-discover.png)
 
-## Совместная доработка
+## РЎРѕРІРјРµСЃС‚РЅР°СЏ РґРѕСЂР°Р±РѕС‚РєР°
 
-* установите JDK
-* установите jruby
-* `git clone` для этого репозитория
-  * `git remote add myfork` для Вашего форка
-* запустите `gem install bunder && bundle install
-* напишите проверки с помощью RSspec (или cucumber)
-* прочитайте [этот документ](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
-* улучшите плагин вашим кодом
-* запустите `bundle exec rspec spec`
-* запустите `bundle exec cucumber`
-* используйте `docker-run50-uat.sh` для финальной проверки (или `docker-run50-uat.cmd` для Windows 10 с поддержкой docker и HyperV)
-  * если обнаружили ошибку - запустите `docker-logstash-only` для отладки и исправления
-* перейдите по адресу `http://localhost:5601` - вы увидите рабочий стол kibana c 2-мы журналами регистрации 1С от двух баз
-* если всё хорошо и правильно - сделайте свой pull-request ;-). Будьте социальным !!!
+* СѓСЃС‚Р°РЅРѕРІРёС‚Рµ JDK
+* СѓСЃС‚Р°РЅРѕРІРёС‚Рµ jruby
+* `git clone` РґР»СЏ СЌС‚РѕРіРѕ СЂРµРїРѕР·РёС‚РѕСЂРёСЏ
+  * `git remote add myfork` РґР»СЏ Р’Р°С€РµРіРѕ С„РѕСЂРєР°
+* Р·Р°РїСѓСЃС‚РёС‚Рµ `gem install bunder && bundle install
+* РЅР°РїРёС€РёС‚Рµ РїСЂРѕРІРµСЂРєРё СЃ РїРѕРјРѕС‰СЊСЋ RSspec (РёР»Рё cucumber)
+* РїСЂРѕС‡РёС‚Р°Р№С‚Рµ [СЌС‚РѕС‚ РґРѕРєСѓРјРµРЅС‚](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
+* СѓР»СѓС‡С€РёС‚Рµ РїР»Р°РіРёРЅ РІР°С€РёРј РєРѕРґРѕРј
+* Р·Р°РїСѓСЃС‚РёС‚Рµ `bundle exec rspec spec`
+* Р·Р°РїСѓСЃС‚РёС‚Рµ `bundle exec cucumber`
+* РёСЃРїРѕР»СЊР·СѓР№С‚Рµ `docker-run50-uat.sh` РґР»СЏ С„РёРЅР°Р»СЊРЅРѕР№ РїСЂРѕРІРµСЂРєРё (РёР»Рё `docker-run50-uat.cmd` РґР»СЏ Windows 10 СЃ РїРѕРґРґРµСЂР¶РєРѕР№ docker Рё HyperV)
+  * РµСЃР»Рё РѕР±РЅР°СЂСѓР¶РёР»Рё РѕС€РёР±РєСѓ - Р·Р°РїСѓСЃС‚РёС‚Рµ `docker-logstash-only` РґР»СЏ РѕС‚Р»Р°РґРєРё Рё РёСЃРїСЂР°РІР»РµРЅРёСЏ
+* РїРµСЂРµР№РґРёС‚Рµ РїРѕ Р°РґСЂРµСЃСѓ `http://localhost:5601` - РІС‹ СѓРІРёРґРёС‚Рµ СЂР°Р±РѕС‡РёР№ СЃС‚РѕР» kibana c 2-РјС‹ Р¶СѓСЂРЅР°Р»Р°РјРё СЂРµРіРёСЃС‚СЂР°С†РёРё 1РЎ РѕС‚ РґРІСѓС… Р±Р°Р·
+* РµСЃР»Рё РІСЃС‘ С…РѕСЂРѕС€Рѕ Рё РїСЂР°РІРёР»СЊРЅРѕ - СЃРґРµР»Р°Р№С‚Рµ СЃРІРѕР№ pull-request ;-). Р‘СѓРґСЊС‚Рµ СЃРѕС†РёР°Р»СЊРЅС‹Рј !!!
 
-## Почему на английском код и документация ?
+## РџРѕС‡РµРјСѓ РЅР° Р°РЅРіР»РёР№СЃРєРѕРј РєРѕРґ Рё РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ ?
 
-* 1С должна захватить мир !!!
+* 1РЎ РґРѕР»Р¶РЅР° Р·Р°С…РІР°С‚РёС‚СЊ РјРёСЂ !!!
 
-## Почему не Beats технология ?
+## РџРѕС‡РµРјСѓ РЅРµ Beats С‚РµС…РЅРѕР»РѕРіРёСЏ ?
 
-не сейчас, но очень скоро и это будет сделано
+РЅРµ СЃРµР№С‡Р°СЃ, РЅРѕ РѕС‡РµРЅСЊ СЃРєРѕСЂРѕ Рё СЌС‚Рѕ Р±СѓРґРµС‚ СЃРґРµР»Р°РЅРѕ
 
-* уже существует репозиторий заглушка Elastic Beats for 1C - https://github.com/silverbulleters/vanessa-beats
-* и один экспериментальный репозиторий - https://github.com/silverbulleters-research/sqliteOneCBeat
+* СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ СЂРµРїРѕР·РёС‚РѕСЂРёР№ Р·Р°РіР»СѓС€РєР° Elastic Beats for 1C - https://github.com/silverbulleters/vanessa-beats
+* Рё РѕРґРёРЅ СЌРєСЃРїРµСЂРёРјРµРЅС‚Р°Р»СЊРЅС‹Р№ СЂРµРїРѕР·РёС‚РѕСЂРёР№ - https://github.com/silverbulleters-research/sqliteOneCBeat
 
-Следите за новостями
+РЎР»РµРґРёС‚Рµ Р·Р° РЅРѕРІРѕСЃС‚СЏРјРё
