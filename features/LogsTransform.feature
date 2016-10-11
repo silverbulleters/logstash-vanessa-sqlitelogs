@@ -5,9 +5,9 @@ Feature: Implements Logstash Event Types
 
 Background:
     Given Plugin is loaded 
-    And setting "servinfo" set to "testdata/servinfo" in config
-    And setting "guid" set to "likeguid" in config
-    And setting "basename" set to "MyVanessaERP" in config
+    And setting "onec_server_reg_path" set to "testdata/servinfo" in config
+    And setting "onec_base_guid" set to "likeguid" in config
+    And setting "onec_base_name" set to "MyVanessaERP" in config
     And setting "path_since" set to "MyVanessaERPLogstash" in config
     And i register plugin with settings
 
