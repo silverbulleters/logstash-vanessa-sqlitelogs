@@ -221,6 +221,30 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   def decorate_value(key, value)
     if key.eql? "curetimestamp"
       LogStash::Timestamp.coerce(value)
+    elsif key.eql? "severity"
+      case value
+      when 1
+        "Информация"
+      when 2
+        "Ошибка"
+      when 3
+        "Предупреждение"
+      when 4
+        "Примечание"
+      else
+        "Не определено"
+      end
+    elsif key.eql? "transactionStatus"
+      case value
+      when 1
+        "Зафиксирована"
+      when 2
+        "Не завершена"
+      when 3
+        "Отмена"
+      else
+        "Не определено"
+      end
     elsif value.is_a?(Time)
       # transform it to LogStash::Timestamp as required by LS
       LogStash::Timestamp.new(value)
