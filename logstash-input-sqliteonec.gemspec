@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name            = 'logstash-input-sqliteonec'
-  s.version         = '0.1.4'
+  s.version         = '0.1.5'
   s.licenses        = ['Apache License (2.0)']
   s.summary         = "Read rows from an sqlite database in 1C Rnterprise"
   s.description     = "Plugin for read event log from 1C sqlite format"
