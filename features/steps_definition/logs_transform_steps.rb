@@ -2,6 +2,8 @@ require 'cucumber'
 require "logstash/devutils/rspec/spec_helper"
 require "logstash/inputs/sqliteonec"
 require "logstash/codecs/plain"
+require "time"
+require "date"
 
 require "timecop"
 
@@ -15,9 +17,8 @@ Given(/^i delete the database "([^"]*)"$/) do |arg1|
   begin
     File.delete(path_to_file) if File.exist?(path_to_file)
   rescue
-    #todo fix ther ERR.ACESS 
+    #todo fix ther Errno::EACCES 
   end
-
 end                                                                                         
                                                                                       
 Given(/^setting "([^"]*)" set to "([^"]*)" in config$/) do |setname, setvalue|               

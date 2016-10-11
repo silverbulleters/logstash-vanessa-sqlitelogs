@@ -4,6 +4,8 @@ require "logstash/namespace"
 require "socket"
 require "stud/interval"
 require "concurrent"
+require "time"
+require "date"
 
 class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   config_name "sqliteonec"
