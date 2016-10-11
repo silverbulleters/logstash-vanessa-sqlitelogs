@@ -4,8 +4,9 @@ Feature: Implements Logstash Event Types
     I want to see in index types what i may analyse, and it does not string
 
 Background:
-    Given Plugin is loaded 
-    And setting "onec_server_reg_path" set to "testdata/servinfo" in config
+    Given Plugin is loaded
+    And i delete the database "MyVanessaERPLogstash"
+    And setting "onec_server_reg_path" set to "testdata/servinfo" in config beside current dir
     And setting "onec_base_guid" set to "likeguid" in config
     And setting "onec_base_name" set to "MyVanessaERP" in config
     And setting "path_since" set to "MyVanessaERPLogstash" in config
@@ -14,10 +15,10 @@ Background:
 Scenario Outline: Types transform
     When start queue in logstash
     And i read row from logs
-    Then collumn "<ColumnName>" transform to type "<EventCollumnType>" with "<Analyzed>"
-    And in queue there is 1 event 
+    And in queue there is 1 event
     And i stop queue
-
+    Then collumn "<ColumnName>" transform to type "<EventCollumnType>" with "<Analyzed>"
+    
 Examples:
     | ColumnName | EventCollumnType | Analyzed | 
     | curetimestamp | LogStash::Timestamp | true |

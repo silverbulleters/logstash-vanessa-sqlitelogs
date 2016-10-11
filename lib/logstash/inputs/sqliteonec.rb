@@ -78,7 +78,7 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
   	textquery = "
 	SELECT
     EventLog.[date] as TrueDateEpoch
-	  , strftime('%Y-%m-%d %H:%M:%S',
+	  , strftime('%Y-%m-%dT%H:%M:%S',
                 EventLog.[date]/10000 - 62135596800,
                 'unixepoch') as curetimestamp
 	  , (EventLog.[date] - 62135596800 * 10000) / 10000 as microsectimestamp
@@ -155,66 +155,71 @@ class LogStash::Inputs::SqliteOnec < LogStash::Inputs::Base
     sleep_max = 5
     sleeptime = sleep_min
 
-    begin
-      @logger.info("Tailing sqliteonec db", :path => @path)
-      until stop?
-        count = 0
-        @table_data.each do |k, table|
-          table_name = table[:name]
-          offset = table[:place]
-          @logger.debug("offset is #{offset}", :k => k, :table => table_name)
-          rows = get_n_rows_from_table(@db, table_name, offset, @batch)
+    @logger.info("Tailing sqliteonec db", :path => @path)
+    while !stop?
+      count = 0
+      @table_data.each do |k, table|
+        table_name = table[:name]
+        offset = table[:place]
+        @logger.debug("offset is #{offset}", :k => k, :table => table_name)
+        rows = get_n_rows_from_table(@db, table_name, offset, @batch)
 
-          count += rows.count
-          @logger.debug("current rows is #{count}")
+        count += rows.count
+        @logger.debug("current rows is #{count}")
 
-          rows.each do |row| 
+        rows.each do |row| 
 
-            event = LogStash::Event.new("host" => @host, "message" => @path, "onecbase" => @onec_base_name)
-            decorate(event)
-            # store each column as a field in the event.
-            #@logger.info("current row", :currow => row)
-
-            payload = Hash[
-              row.map { |k, v| 
-                  [k.to_s, decorate_value(v)] 
+          event = LogStash::Event.new("host" => @host, "message" => @path, "onecbase" => @onec_base_name)
+          decorate(event)
+            
+          payload = Hash[
+            row.map { |k, v| 
+                [k.to_s, decorate_value(k.to_s, v)] 
               }
-            ]  
+          ]  
 
-            eventPayLoad = LogStash::Event.new(payload)
+          eventPayLoad = LogStash::Event.new(payload)
 
-            #@logger.info("magic people - woodoo people ", :e1 => event, :e2 => eventPayLoad)
-            event.append(eventPayLoad)
+          decorate(eventPayLoad)
+          event.append(eventPayLoad)
 
-            #event["timestamp"] = event["curetimestamp"]
-
-            queue << event
-            @table_data[k][:place] = row[:rowID]
-          end
-          # Store the last-seen row in the database
-          update_placeholder(@sinceDb, @onec_base_name + table_name, @table_data[k][:place])
+          queue << event
+          @table_data[k][:place] = row[:rowID]
         end
+      update_placeholder(@sinceDb, @onec_base_name + table_name, @table_data[k][:place])
+    end
 
-        if count == 0
-          # nothing found in that iteration
-          # sleep a bit
-          @logger.info("No new rows. Sleeping.", :time => sleeptime)
-          sleeptime = [sleeptime * 2, sleep_max].min
+    if count == 0
+       # nothing found in that iteration
+       # sleep a bit
+       @logger.info("No new rows. Sleeping.", :time => sleeptime)
+       sleeptime = [sleeptime * 2, sleep_max].min
 
-          Stud.stoppable_sleep(sleeptime) { stop? }
-		  @db.disconnect
-		  @db.connect("jdbc:sqlite:#{@path}")
+       Stud.stoppable_sleep(sleeptime) {
+         stop? 
+       }
+		   @db.disconnect
+		   @db.connect("jdbc:sqlite:#{@path}")
 		  #//@db = Sequel.connect("jdbc:sqlite:#{@path}") 
-        else
-          sleeptime = sleep_min
-        end
-      end # loop
-    end # begin/rescue
+    else
+       sleeptime = sleep_min
+       Stud.stoppable_sleep(sleeptime) {
+         stop? 
+       }
+     end
+   end # loop
   end #run
 
+  def stop
+    # nothing to do in this case so it is not necessary to define stop
+    
+  end
+
   private
-  def decorate_value(value)
-    if value.is_a?(Time)
+  def decorate_value(key, value)
+    if key.eql? "curetimestamp"
+      LogStash::Timestamp.coerce(value)
+    elsif value.is_a?(Time)
       # transform it to LogStash::Timestamp as required by LS
       LogStash::Timestamp.new(value)
     elsif value.is_a?(DateTime)
