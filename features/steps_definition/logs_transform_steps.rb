@@ -1,13 +1,22 @@
 require 'cucumber'
+require "logstash/devutils/rspec/spec_helper"
+require "logstash/inputs/sqliteonec"
+require "logstash/codecs/plain"
 
 Given(/^Plugin is loaded$/) do                                                        
-  pending # Write code here that turns the phrase above into concrete actions         
+  @plugin_class =  LogStash::Inputs::SqliteOnec
+  @config = {}
 end                                                                                   
                                                                                       
-Given(/^setting "([^"]*)" set to "([^"]*)" in config$/) do |arg1, arg2|               
-  pending # Write code here that turns the phrase above into concrete actions         
+Given(/^setting "([^"]*)" set to "([^"]*)" in config$/) do |setname, setvalue|               
+  @config.merge!({setname => setvalue})
 end                                                                                   
-                                                                                      
+
+Given(/^i register plugin with settings$/) do
+  p @config
+  @plugin = @plugin_class.new(@config)
+end
+
 When(/^start queue in logstash$/) do                                                  
   pending # Write code here that turns the phrase above into concrete actions         
 end                                                                                   

@@ -8,6 +8,8 @@ Background:
     And setting "servinfo" set to "testdata/servinfo" in config
     And setting "guid" set to "likeguid" in config
     And setting "basename" set to "MyVanessaERP" in config
+    And setting "path_since" set to "MyVanessaERPLogstash" in config
+    And i register plugin with settings
 
 Scenario Outline: Types transform
     When start queue in logstash
