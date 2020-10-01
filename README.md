@@ -1,58 +1,52 @@
 # LogStash Input Plugin for 1C Application Logs
 
-* use logstash to collect metrix from sqlite format of application logs in [1C:Enterprise Platform](http://1c-dn.com/1c_enterprise/what_is_1c_enterprise/) 
+* плагин для чтения с помощью LogStash журнала регистрации в формате sqlite для  [Платформы 1C:Предприятия](http://1c.ru) 
 
-## Installation
+## Инсталяция
 
-you need
+Вам понадобится
 
-* install LogStash
-* get the plugin from release page [current release is 0.1.4](https://github.com/silverbulleters-research/logstash-vanessa-sqlitelogs/releases/download/0.1.4/logstash-input-sqliteonec-0.1.4.gem)
-* run `logstash-plugin install /srv/logstash-input-sqliteonec-0.1.4.gem`
+* исталировать logstash
+* скачать плагин со страницы релизов [текущий релиз 0.1.4](https://github.com/silverbulleters/logstash-vanessa-sqlitelogs/releases)
+* запустить команду в консоли `logstash-plugin install /srv/logstash-input-sqliteonec-0.1.4.gem`
 
-## Input Config
+## Настройка
 
-* create your logstash config file with `input`, `filter` and `output` section
+* создайте ваш конфигурационный файл с секциями `input`, `filter` и `output`
 
-example input section looks like:
+примерная секция `input` выглядит так
 
 ```
 input {
 
     sqliteonec {
 		type => "1CLog"
-		path_since => "IncrementalInputTable" # table name to create last read records
-		onec_base_name => "MyVanessaERP" # human readable base name
-		onec_base_guid => "9c1205e0-595b-4edd-9f70-6dda09b6f888" # guid of database (get from the 1CV8Clst.lst file)
-		onec_server_reg_path => "C:\srvinfo\reg_1541" # cluster server files path
+		path_since => "IncrementalInputTable" # где хранить время последней синхронизированной записи
+		onec_base_name => "MyVanessaERP" # человекочитаемое имя базы для отображения
+		onec_base_guid => "9c1205e0-595b-4edd-9f70-6dda09b6f888" # GUID базы (обычно берется из файла 1CV8Clst.lst)
+		onec_server_reg_path => "C:\srvinfo\reg_1541" # путь к каталогу хранения журналов на сервере
     }
 
 }
 ```
 
-* run `logstash -f your-config-file.conf` and go to the kibana dashboards - you will see your logs
+* запустите `logstash -f your-config-file.conf` и если вы откроете рабочий стол kibana - вы увидите свои журналы регистрации
 
-![simple logs](./docs/simple-discover.png)
+![simple logs](./simple-discover.png)
 
-## Contribute
+## Совместная доработка
 
-* intall JDK
-* install jruby
-* `git clone` this repo
-  * `git remote add myfork` with your fork
-* run `gem install bunder && bundle install
-* write specs with RSspec (or cucumber)
-* read [this doc](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
-* impove plugin with your code
-* run `bundle exec rspec spec`
-* run `bundle exec cucumber`
-* use `docker-run50-uat.sh` for final checks (or `docker-run50-uat.cmd` on Windows 10 with docker HyperV support)
-  * if there is a error - run `docker-logstash-only` for debug and fix
-* try to see `http://localhost:5601` - you will see kibana with two demo 1C Application Journal
-* if all is correct pull-request your changes ;-). Be social !!!
-
-## Why in English and not in Russia
-
-* let it be 1C World !!!
-
-but there is a [simple Russian readme](./docs/README_RU.md) in `docs` dir
+* установите JDK
+* установите jruby
+* `git clone` для этого репозитория
+  * `git remote add myfork` для Вашего форка
+* запустите `gem install bunder && bundle install
+* напишите проверки с помощью RSspec (или cucumber)
+* прочитайте [этот документ](https://www.elastic.co/guide/en/logstash/5.0/_how_to_write_a_logstash_input_plugin.html#_how_to_write_a_logstash_input_plugin)
+* улучшите плагин вашим кодом
+* запустите `bundle exec rspec spec`
+* запустите `bundle exec cucumber`
+* используйте `docker-run50-uat.sh` для финальной проверки (или `docker-run50-uat.cmd` для Windows 10 с поддержкой docker и HyperV)
+  * если обнаружили ошибку - запустите `docker-logstash-only` для отладки и исправления
+* перейдите по адресу `http://localhost:5601` - вы увидите рабочий стол kibana c 2-мы журналами регистрации 1С от двух баз
+* если всё хорошо и правильно - сделайте свой pull-request ;-). Будьте социальным !!!
