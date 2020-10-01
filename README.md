@@ -1,7 +1,5 @@
 # LogStash Input Plugin for 1C Application Logs
 
-[![Build Status](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs.svg?branch=master)](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs)
-
 * use logstash to collect metrix from sqlite format of application logs in [1C:Enterprise Platform](http://1c-dn.com/1c_enterprise/what_is_1c_enterprise/) 
 
 ## Installation
@@ -58,10 +56,3 @@ input {
 * let it be 1C World !!!
 
 but there is a [simple Russian readme](./docs/README_RU.md) in `docs` dir
-
-## Why Not Beats ?
-
-not now, but soon
-
-* there is empty repo with Elastic Beats for 1C - https://github.com/silverbulleters/vanessa-beats
-* and experimental concept - https://github.com/silverbulleters-research/sqliteOneCBeat
