@@ -1,15 +1,13 @@
 # LogStash Input Plugin for 1C Application Logs
 
-[![Build Status](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs.svg?branch=master)](https://travis-ci.org/silverbulleters-research/logstash-vanessa-sqlitelogs)
-
 * плагин для чтения с помощью LogStash журнала регистрации в формате sqlite для  [Платформы 1C:Предприятия](http://1c.ru) 
 
 ## Инсталяция
 
-вам понадобится
+Вам понадобится
 
 * исталировать logstash
-* скачать плагин со страницы релизов [текущий релиз 0.1.4](https://github.com/silverbulleters-research/logstash-vanessa-sqlitelogs/releases/download/0.1.4/logstash-input-sqliteonec-0.1.4.gem)
+* скачать плагин со страницы релизов [текущий релиз 0.1.4](https://github.com/silverbulleters/logstash-vanessa-sqlitelogs/releases)
 * запустить команду в консоли `logstash-plugin install /srv/logstash-input-sqliteonec-0.1.4.gem`
 
 ## Настройка
@@ -32,7 +30,7 @@ input {
 }
 ```
 
-* запустите `logstash -f your-config-file.conf` и если вы откроете рабочий стол kibana - вы увидет свои журналы регистрации
+* запустите `logstash -f your-config-file.conf` и если вы откроете рабочий стол kibana - вы увидите свои журналы регистрации
 
 ![simple logs](./simple-discover.png)
 
@@ -52,16 +50,3 @@ input {
   * если обнаружили ошибку - запустите `docker-logstash-only` для отладки и исправления
 * перейдите по адресу `http://localhost:5601` - вы увидите рабочий стол kibana c 2-мы журналами регистрации 1С от двух баз
 * если всё хорошо и правильно - сделайте свой pull-request ;-). Будьте социальным !!!
-
-## Почему на английском код и документация ?
-
-* 1С должна захватить мир !!!
-
-## Почему не Beats технология ?
-
-не сейчас, но очень скоро и это будет сделано
-
-* уже существует репозиторий заглушка Elastic Beats for 1C - https://github.com/silverbulleters/vanessa-beats
-* и один экспериментальный репозиторий - https://github.com/silverbulleters-research/sqliteOneCBeat
-
-Следите за новостями
